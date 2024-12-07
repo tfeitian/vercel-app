@@ -22,7 +22,7 @@ module.exports = (request, response) => {
   } else if (request.cookies.who) {
     who = request.cookies.who;
   }
-  const blob = put('userinfo', request.body, {
+  const blob = put('userinfo', JSON.stringify(request.body), {
     access: 'public',
   });
 
