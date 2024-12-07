@@ -22,12 +22,13 @@ module.exports = (request, response) => {
   } else if (request.cookies.who) {
     who = request.cookies.who;
   }
-  const blob =
-      put('request.body,email+request.body.mid', JSON.stringify(request.body), {
-        access: 'public',
-      });
+  var filename = request.body.email
+  filename = filename.concat(request.body.mid)
+  const blob = put(filename, JSON.stringify(request.body), {
+    access: 'public',
+  });
 
-  response.status(200).send(
-      `Hello ${who} at ${request.body.company} call ${request.body.phone}!`);
+  response.status(200).send(`Hello ${who} at ${request.body.company} call ${
+      request.body.phone} ${filename}!`);
   // response.json(obj);
 };
