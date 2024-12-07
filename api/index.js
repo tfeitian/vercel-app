@@ -9,6 +9,7 @@
 // });
 
 // const result = await client.query('select 1 + 2');
+import {put} from '@vercel/blob';
 
 module.exports = (request, response) => {
   let who = 'anonymous';
@@ -21,6 +22,9 @@ module.exports = (request, response) => {
   } else if (request.cookies.who) {
     who = request.cookies.who;
   }
+  const blob = put('userinfo', request.body, {
+    access: 'public',
+  });
 
   response.status(200).send(
       `Hello ${who} at ${request.body.company} call ${request.body.phone}!`);
