@@ -20,18 +20,18 @@ module.exports = (request, response) => {
 
   if (request.body && request.body.email) {  // post with who:45gtg
     who = request.body.email;
+    var filename = request.body.email
+    filename = filename.concat(request.body.mid)
+    // const blob = put(filename, JSON.stringify(request.body), {
+    //   access: 'public',
+    // });
+    redis.set(filename, JSON.stringify(request.body));
   } else if (request.query
                  .who) {  // get with http://localhost:3000/api?who=fsfgs--
     who = request.query.who;
   } else if (request.cookies.who) {
     who = request.cookies.who;
   }
-  var filename = request.body.email
-  filename = filename.concat(request.body.mid)
-  // const blob = put(filename, JSON.stringify(request.body), {
-  //   access: 'public',
-  // });
-  redis.set(filename, JSON.stringify(request.body));
 
   response.status(200).send(`Hello ${who} at ${request.body.company} call ${
       request.body.phone} ${filename}!`);
