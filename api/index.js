@@ -21,7 +21,7 @@ module.exports = async (request, response) => {
     who = request.body.email;
     var filename = request.body.email
     filename = filename.concat(request.body.mid);
-    await redis.set(filename, JSON.stringify(request.body));
+    var status = await redis.set(filename, JSON.stringify(request.body));
   } else if (request.query
     .who) {  // get with http://localhost:3000/api?who=fsfgs--
     who = request.query.who;
