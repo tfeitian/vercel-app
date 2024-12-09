@@ -19,9 +19,11 @@ module.exports = async (request, response) => {
   var filename = ""
 
   if (request.body && request.body.email) {  // post with who:45gtg
+    const now = new Date();
     who = request.body.email;
     filename = request.body.email
     filename = filename.concat(request.body.mid);
+    request.body.data = now;
     var status = await redis.set(filename, JSON.stringify(request.body));//Store to db
   }
   else if (request.query.who) {  // get with http://localhost:3000/api?who=fsfgs--
