@@ -37,10 +37,10 @@ module.exports = async (request, response) => {
   const data = await redis.get(filename)
   if (data) {
     var ss = JSON.stringify(data);
+    response.status(200).send(`${ss}`);
   } else {
-    var ss = "";
+    response.status(404).send();
   }
 
-  response.status(200).send(`${ss}`);
   // response.json(obj);
 };
