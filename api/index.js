@@ -9,31 +9,26 @@
 // });
 
 // const result = await client.query('select 1 + 2');
-import {Redis} from '@upstash/redis';
-import {put} from '@vercel/blob';
+import { Redis } from '@upstash/redis';
 
 // Initialize Redis
 const redis = Redis.fromEnv();
 
-module.exports = (request, response) => {
+module.exports = async (request, response) => {
   let who = 'anonymous';
 
   if (request.body && request.body.email) {  // post with who:45gtg
     who = request.body.email;
     var filename = request.body.email
-    filename = filename.concat(request.body.mid)
-    // const blob = put(filename, JSON.stringify(request.body), {
-    //   access: 'public',
-    // });
-    redis.set(filename, JSON.stringify(request.body));
+    filename = filename.concat(request.body.mid);
+    await redis.set(filename, JSON.stringify(request.body));
   } else if (request.query
-                 .who) {  // get with http://localhost:3000/api?who=fsfgs--
+    .who) {  // get with http://localhost:3000/api?who=fsfgs--
     who = request.query.who;
   } else if (request.cookies.who) {
     who = request.cookies.who;
   }
 
-  response.status(200).send(`Hello ${who} at ${request.body.company} call ${
-      request.body.phone} ${filename}!`);
+  response.status(200).send(`Hello ${who} at ${request.body.company} call ${request.body.phone} ${filename} ${status}!`);
   // response.json(obj);
 };
