@@ -21,7 +21,7 @@ module.exports = async (request, response) => {
     who = request.body.email;
     var filename = request.body.email
     filename = filename.concat(request.body.mid);
-    var status = await redis.set(filename, JSON.stringify(request.body));
+    // var status = await redis.set(filename, JSON.stringify(request.body));
   } else if (request.query
     .who) {  // get with http://localhost:3000/api?who=fsfgs--
     who = request.query.who;
@@ -29,6 +29,10 @@ module.exports = async (request, response) => {
     who = request.cookies.who;
   }
 
-  response.status(200).send(`Hello ${who} at ${request.body.company} call ${request.body.phone} ${filename} ${status}!`);
+
+  const data = await redis.get(filename)
+  var ss = JSON.stringify(data);
+
+  response.status(200).send(`Hello ${who} at ${request.body.company} call ${request.body.phone} ${filename} ${ss}!`);
   // response.json(obj);
 };
