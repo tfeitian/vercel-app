@@ -16,23 +16,31 @@ const redis = Redis.fromEnv();
 
 module.exports = async (request, response) => {
   let who = 'anonymous';
+  var filename = ""
 
   if (request.body && request.body.email) {  // post with who:45gtg
     who = request.body.email;
-    var filename = request.body.email
+    filename = request.body.email
     filename = filename.concat(request.body.mid);
-    // var status = await redis.set(filename, JSON.stringify(request.body));
-  } else if (request.query
-    .who) {  // get with http://localhost:3000/api?who=fsfgs--
+    var status = await redis.set(filename, JSON.stringify(request.body));//Store to db
+  }
+  else if (request.query.who) {  // get with http://localhost:3000/api?who=fsfgs--
     who = request.query.who;
-  } else if (request.cookies.who) {
+    // const data = await redis.get(who)
+    // var ss = JSON.stringify(data);
+    filename = who;
+  }
+  else if (request.cookies.who) {
     who = request.cookies.who;
   }
 
-
   const data = await redis.get(filename)
-  var ss = JSON.stringify(data);
+  if (data) {
+    var ss = JSON.stringify(data);
+  } else {
+    var ss = "";
+  }
 
-  response.status(200).send(`Hello ${who} at ${request.body.company} call ${request.body.phone} ${filename} ${ss}!`);
+  response.status(200).send(`${ss}`);
   // response.json(obj);
 };
