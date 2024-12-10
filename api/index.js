@@ -23,26 +23,35 @@ module.exports = async (request, response) => {
     who = request.body.email;
     filename = request.body.email
     filename = filename.concat(request.body.mid);
-    request.body.data = now;
-    var status = await redis.set(filename, JSON.stringify(request.body));//Store to db
+    const data = await redis.get(filename)
+    if (data) {
+      var ss = JSON.stringify(data);
+      response.status(200).send(`${ss}`);
+    }
+    else {
+      request.body.data = now;
+      var status = await redis.set(filename, JSON.stringify(request.body));//Store to db
+      response.status(200).send(`Write Ok!`);
+    }
   }
   else if (request.query.who) {  // get with http://localhost:3000/api?who=fsfgs--
     who = request.query.who;
     // const data = await redis.get(who)
     // var ss = JSON.stringify(data);
     filename = who;
+    const data = await redis.get(filename)
+
+    if (data) {
+      var ss = JSON.stringify(data);
+      response.status(200).send(`${ss}`);
+    } else {
+      response.status(404).send();
+    }
   }
   else if (request.cookies.who) {
     who = request.cookies.who;
   }
 
-  const data = await redis.get(filename)
-  if (data) {
-    var ss = JSON.stringify(data);
-    response.status(200).send(`${ss}`);
-  } else {
-    response.status(404).send();
-  }
 
   // response.json(obj);
 };
