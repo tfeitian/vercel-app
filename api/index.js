@@ -25,8 +25,8 @@ module.exports = async (request, response) => {
     filename = filename.concat(request.body.mid);
     const data = await redis.get(filename)
     if (data) {
-      response.status(200).json(JSON.parse(data));
-    }
+      var ss = JSON.stringify(data);
+      response.status(200).send(`${ss}`);    }
     else {
       request.body.data = now;
       var status = await redis.set(filename, JSON.stringify(request.body));//Store to db
@@ -41,7 +41,8 @@ module.exports = async (request, response) => {
     const data = await redis.get(filename)
 
     if (data) {
-      response.status(200).json(JSON.parse(data));
+      var ss = JSON.stringify(data);
+      response.status(200).send(`${ss}`);
     } else {
       response.status(404).send();
     }
