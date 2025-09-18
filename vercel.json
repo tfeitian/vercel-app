@@ -1,5 +1,9 @@
 {
     "version": 2,
+    "regions": [
+        "sin1",
+        "hnd1"
+    ],
     "routes": [
         {
             "src": "/api/(.*)",
